@@ -1,0 +1,56 @@
+:root {
+  --midnight-purple: #1a0b2e;
+  --deep-void: #0d041a;
+  --arcane-gold: #d4af37;
+  --parchment: #f4ecd8;
+  --ink: #2c241b;
+}
+
+body {
+  background-color: var(--midnight-purple);
+  color: var(--parchment);
+  font-family: 'Georgia', serif;
+  margin: 0;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.grimoire-container {
+  max-width: 800px;
+  width: 100%;
+}
+
+.card {
+  background-color: var(--parchment);
+  color: var(--ink);
+  border: 2px solid var(--arcane-gold);
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+button {
+  background-color: var(--arcane-gold);
+  color: var(--deep-void);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background-color: #f1c40f;
+  transform: scale(1.02);
+}
+
+input {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--ink);
+  padding: 0.5rem;
+  font-family: 'Georgia', serif;
+}
