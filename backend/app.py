@@ -4,7 +4,6 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
-from models import db
 
 def create_app():
     app = Flask(__name__)
@@ -13,6 +12,8 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     CORS(app, supports_credentials=True)
+
+    from models import db
 
     db.init_app(app)
     Migrate(app, db)

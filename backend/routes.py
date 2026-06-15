@@ -78,6 +78,8 @@ def manage_quests():
 def delete_quest(id):
     try:
         quest = Quest.query.get(id)
+        if not quest:
+            return jsonify({"error": "Quest not found"}), 404
         db.session.delete(quest)
         db.session.commit()
         return jsonify({"message": "Quest banished"}), 200
