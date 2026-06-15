@@ -10,12 +10,16 @@ export const QuestProvider = ({ children }) => {
     // Fetch all quests for the current user from the backend
     const fetchQuests = async () => {
         try {
-            const res = await fetch('/api/quests');
+            
+            const res = await fetch('/api/quests', {
+                credentials: 'include'
+            });
+            
             if (res.ok) {
                 const data = await res.json();
                 setQuests(data);
             } else {
-                console.error("Failed to fetch quests");
+                console.error("Failed to fetch quests: Response not OK");
             }
         } catch (error) {
             console.error("Error connecting to the Grimoire:", error);
@@ -32,6 +36,7 @@ export const QuestProvider = ({ children }) => {
         const res = await fetch('/api/quests', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({ title })
         });
         if (res.ok) {
@@ -41,7 +46,7 @@ export const QuestProvider = ({ children }) => {
 
     // Remove a quest
     const deleteQuest = async (id) => {
-        const res = await fetch(`/api/quests/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/api/quests/${id}`, { method: 'DELETE', credentials: 'include' });
         if (res.ok) {
             setQuests((prev) => prev.filter((quest) => quest.id !== id));
         }

@@ -1,13 +1,24 @@
 /* interactive UI */
 /* foundational layout linking state parameters together. Handles adding tasks, updating status checkboxes, viewing nested relational items & saving individual page description directly. */
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GrimoireForm from '../components/GrimoireForm';
 import QuestCard from '../components/QuestCard';
 import { QuestContext } from '../context/QuestProvider';
+import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
+    const navigate = useNavigate();
+    const { user } = useAuth(); 
     const { quests } = useContext(QuestContext);
+
+    useEffect(() => {
+        // redirect to login if no user is found
+        if (!user) {
+            navigate("/"); 
+        }
+    }, [user, navigate]);
 
     return (
         <div className="grimoire-container">
@@ -27,3 +38,5 @@ const Dashboard = () => {
         </div>
     );
 };
+
+export default Dashboard;
