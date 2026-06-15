@@ -3,70 +3,78 @@
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
-// create content object 
-// acts as global container: hold our authentication state 
-// initialize with null, eventually will hold user, login & logout functions 
-const AuthContext = createContext(null);
+// create the Context
+export const AuthContext = createContext(null);
 
-// create provider component 
-// component wrappped inside <AuthProvider>: have access to auth state & methods 
+// create the Provider Component
 export const AuthProvider = ({ children }) => {
-    // State: hold current authenticated user's data 
     const [user, setUser] = useState(null);
-
-    // State: track if still checking user's session status on inital page load 
-    // prevents app from flashing Logged out screens while fetching data
     const [loading, setLoading] = useState(true);
 
-    // State: store authentication-related error message 
-    const [authError, setAuthError] = useState(null);
-
-    // persistent session check: runs once on app mounts
+    // check for active session when app first loads
     useEffect(() => {
-        // sends request to backend to check if valid session cookie/token exists
         fetch('/api/check_session')
-            .then(res => res.ok ? res.json() : Promise.reject()) // successful: parse JSON, if not: rejected 
-            .then(data => setUser(data)) // save returned user data to state 
-            .catch(() => setUser(null)) // no valid session: user is null 
-            .finally(() => setLoading(false)); // turn off loading spinner regardless outcome 
-    }, []); // empty dependency array: only runs once on inital page load 
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                }
+                throw new Error("No active session");
+            })
+            .then((userData) => setUser(userData))
+            .catch(() => setUser(null))
+            .finally(() => setLoading(false));
+    }, []);
 
-    // login function 
+    // login function
     const login = async (username, password) => {
-        setAuthError(null); // clear previous login error before trying again 
         const res = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
         });
-        const data = await res.json();
-        if (res.ok) { 
-            setUser(data); // update state with logged-in user data
-            return true; // return true: calling component know login succeeded 
+        
+        if (res.ok) {
+            const data = await res.json();
+            setUser(data);
+            return { success: true };
+        } else {
+            const errorData = await res.json();
+            return { success: false, error: errorData.error };
         }
-
-        // login failed: save error message from backend to state
-        setAuthError(data.error);
-        return false; // return false: calling component knows it failed 
     };
 
-    // logout function 
+    // register function
+    const register = async (username, password) => {
+        const res = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            setUser(data);
+            return { success: true };
+        } else {
+            const errorData = await res.json();
+            return { success: false, error: errorData.error };
+        }
+    };
+
+    // logout function
     const logout = async () => {
         const res = await fetch('/api/logout', { method: 'DELETE' });
         if (res.ok) {
-            setUser(null); // reset user state null, effetively logging out of UI 
+            setUser(null);
         }
     };
 
-    // provide values to component tree
-    // every property passed into value object becomes globally accesible to children 
     return (
-        <AuthContext.Provider value={{ user, loading, authError, login, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
-// custom hook
-// insted of importing both useContext & AuthContent every file, components can call useAuth() to access user data & authentication methods 
+// quick access to the Auth Context
 export const useAuth = () => useContext(AuthContext);
