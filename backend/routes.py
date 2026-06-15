@@ -2,7 +2,7 @@
 # handles complete authentication routing & granular CRUD endpoints, isolating user scopes through standard Flask cookies(session)
 
 from flask import Blueprint, request, session, jsonify
-from models import db, User
+from models import db, User, Quest
 
 bp = Blueprint('routes', __name__)
 
@@ -56,12 +56,10 @@ def manage_quests():
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
 
-    if request.method == 'GET':
-        quests = Quest.query.filter_by(user_id=user_id).all()
-        return jsonify([q.to_dict() for q in quests]), 200
-
     if request.method == 'POST':
-        data = request.get_json()
+        data = request.get_json() # ONLY call if POST
+        print(f"DEBUG: Data received: {data}")
+        
         try:
             new_quest = Quest(title=data.get('title'), user_id=user_id)
             db.session.add(new_quest)
@@ -69,7 +67,12 @@ def manage_quests():
             return jsonify(new_quest.to_dict()), 201
         except Exception as e:
             db.session.rollback()
-            return jsonify({"error": "Failed to scribe quest"}), 500
+            print(f"DEBUG ERROR: {e}")
+            return jsonify({"error": str(e)}), 500
+
+    # runs if method is GET
+    quests = Quest.query.filter_by(user_id=user_id).all()
+    return jsonify([q.to_dict() for q in quests]), 200
 
 @bp.route('/api/quests/<int:id>', methods=['DELETE'])
 def delete_quest(id):
