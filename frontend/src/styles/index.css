@@ -6,7 +6,7 @@
   --ink: #2c241b;
 }
 
-/* Base Styles */
+/* base styles */
 * { box-sizing: border-box; }
 
 body {
@@ -17,8 +17,8 @@ body {
   min-height: 100vh;
 }
 
-/* Layout Container */
-.login-container {
+/* layout container */
+.login-container, .grimoire-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +27,7 @@ body {
   width: 100vw;
 }
 
-/* Form Styling */
+/* form styling */
 form {
   background-color: var(--deep-void);
   padding: 2rem;

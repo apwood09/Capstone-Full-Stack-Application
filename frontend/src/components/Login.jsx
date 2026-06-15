@@ -17,27 +17,33 @@ const Login = () => {
         });
 
         if (res.ok) {
-            navigate('/dashboard'); 
-        } else {
-            alert("Invalid credentials. Try again!");
-        }
-    };
+        window.location.href = '/dashboard';
+    } else {
+        alert("Invalid credentials.");
+    }
+};
 
-    return (
+   return (
         <div className="login-container">
-            <h1 style={{ color: 'var(--arcane-gold)' }}>Enter the Grimoire</h1>
+            {/* Everything is inside the container, so it will center vertically and horizontally */}
             <form onSubmit={handleLogin}>
+                <h1 style={{ color: 'var(--arcane-gold)', textAlign: 'center' }}>
+                    Enter the Grimoire
+                </h1>
+                
                 <input 
                     type="text" 
                     placeholder="Username" 
                     value={username} 
                     onChange={(e) => setUsername(e.target.value)} 
+                    required
                 />
                 <input 
                     type="password" 
                     placeholder="Password" 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
+                    required
                 />
                 <button type="submit">Unlock Grimoire</button>
             </form>

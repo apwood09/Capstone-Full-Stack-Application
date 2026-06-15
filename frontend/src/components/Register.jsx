@@ -20,25 +20,29 @@ const Register = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Begin Your Journey</h1>
-            <input 
-                placeholder="Username" 
-                onChange={(e) => setUsername(e.target.value)} 
-                required 
-            />
-            <input 
-                type="password" 
-                placeholder="Password" 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
-            />
-            <button type="submit">Sign Up</button>
+        // The container class here applies the flex centering from your CSS
+        <div className="login-container">
+            <form onSubmit={handleSubmit}>
+                <h1>Begin Your Journey</h1>
+                <input 
+                    placeholder="Username" 
+                    onChange={(e) => setUsername(e.target.value)} 
+                    required 
+                />
+                <input 
+                    type="password" 
+                    placeholder="Password" 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    required 
+                />
+                <button type="submit">Sign Up</button>
 
-            <p style={{ marginTop: '15px' }}>
-                Already have an account? <Link to="/login">Log in here</Link>
-            </p>
-        </form>
+                <p style={{ marginTop: '15px', textAlign: 'center' }}>
+                    Already have an account? <br />
+                    <Link to="/login" style={{ color: 'var(--arcane-gold)' }}>Log in here</Link>
+                </p>
+            </form>
+        </div>
     );
 };
 

@@ -10,12 +10,11 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/check_session')
+        fetch('/api/check_session', { credentials: 'include' })
             .then(res => res.ok ? res.json() : null)
-            .then(data => {
-                setUser(data);
-                setLoading(false);
-            });
+            .then(data => setUser(data))
+            .catch(() => setUser(null))
+            .finally(() => setLoading(false));
     }, []);
 
     const login = async (username, password) => {
@@ -23,6 +22,7 @@ export const AuthProvider = ({ children }) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
+            credentials: 'include'
         });
         if (res.ok) {
             const data = await res.json();
@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
+            credentials: 'include' // Added credentials here for consistency
         });
         if (res.ok) {
             const data = await res.json();
@@ -51,15 +52,24 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        const res = await fetch('/api/logout', { method: 'DELETE' });
-        if (res.ok) {
-            setUser(null);
+        try {
+            const res = await fetch('/api/logout', { 
+                method: 'DELETE',
+                credentials: 'include' 
+            }); // Fixed: Added closing brace here
+            
+            if (res.ok) {
+                setUser(null); 
+                window.location.href = '/'; 
+            }
+        } catch (err) {
+            console.error("Logout error:", err);
         }
     };
 
     return (
         <AuthContext.Provider value={{ user, loading, login, register, logout }}>
-            {children}
+            {loading ? <p>Consulting the archives...</p> : children}
         </AuthContext.Provider>
     );
 };

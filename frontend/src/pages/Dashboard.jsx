@@ -6,26 +6,19 @@ import { useNavigate } from 'react-router-dom';
 import GrimoireForm from '../components/GrimoireForm';
 import QuestCard from '../components/QuestCard';
 import { QuestContext } from '../context/QuestProvider';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
     const navigate = useNavigate();
     const { user, loading, logout } = useAuth(); 
     const { quests } = useContext(QuestContext);
 
-    useEffect(() => {
-        // redirect to login if no user is found
-        if (!loading && !user) {
-            navigate("/"); 
-        }
-    }, [user, loading, navigate]);
-
     const handleLogout = async () => {
         await logout(); // calls the function from AuthContext
-        navigate("/");  // redirects to registration form
+
     };
 
-    if (loading) return <p style={{ color: 'white', textAlign: 'center' }}>Consulting the archives...</p>; 
+    if (loading) return <p style={{ color: 'white', textAlign: 'center' }}>Consulting the archives...</p>;
 
     return (
         <div className="grimoire-container">
