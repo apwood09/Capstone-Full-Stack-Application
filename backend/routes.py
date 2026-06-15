@@ -1,7 +1,7 @@
 # secure API architecture
 # handles complete authentication routing & granular CRUD endpoints, isolating user scopes through standard Flask cookies(session)
 
-from flask import Blueprint, request, session, jsonify
+from flask import Blueprint, request, session, jsonify, make_response
 from models import db, User, Quest
 
 bp = Blueprint('routes', __name__)
@@ -89,6 +89,7 @@ def delete_quest(id):
 
 @bp.route('/api/logout', methods=['DELETE'])
 def logout():
-    # clear the session user_id
-    session.pop('user_id', None)
+    session.clear() # clears the whole session 
+    response = jsonify({"message": "Soul unbound"})
+    response.delete_cookie('session')
     return jsonify({"message": "Soul unbound from the Grimoire"}), 200
