@@ -13,13 +13,17 @@ const Dashboard = () => {
         <div className="grimoire-container">
             <h1 style={{ color: 'var(--arcane-gold)', textAlign: 'center' }}>The Daily Grimoire</h1>
             <GrimoireForm />
+            
             <div className="quest-list">
-                {quests.map(quest => (
-                    <QuestCard key={quest.id} quest={quest} />
-                ))}
+                {/* Add this debug/status logic */}
+                {quests.length === 0 ? (
+                    <p style={{ textAlign: 'center' }}>No quests found in the Grimoire. Inscribe one above!</p>
+                ) : (
+                    quests.map(quest => (
+                        <QuestCard key={quest.id} quest={quest} />
+                    ))
+                )}
             </div>
         </div>
     );
 };
-
-export default Dashboard;
