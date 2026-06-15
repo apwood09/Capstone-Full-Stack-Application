@@ -86,3 +86,9 @@ def delete_quest(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": "Failed to banish quest"}), 500
+
+@bp.route('/api/logout', methods=['DELETE'])
+def logout():
+    # clear the session user_id
+    session.pop('user_id', None)
+    return jsonify({"message": "Soul unbound from the Grimoire"}), 200
