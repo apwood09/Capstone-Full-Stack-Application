@@ -40,7 +40,7 @@ export const QuestProvider = ({ children }) => {
             body: JSON.stringify({ title })
         });
         if (res.ok) {
-            fetchQuests(); // Refresh list after adding
+            fetchQuests(); // refresh list after adding
         }
     };
 

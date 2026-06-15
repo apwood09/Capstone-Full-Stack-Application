@@ -3,36 +3,27 @@
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
-// create the Context
 export const AuthContext = createContext(null);
 
-// create the Provider Component
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // check for active session when app first loads
     useEffect(() => {
         fetch('/api/check_session')
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                throw new Error("No active session");
-            })
-            .then((userData) => setUser(userData))
-            .catch(() => setUser(null))
-            .finally(() => setLoading(false));
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                setUser(data);
+                setLoading(false);
+            });
     }, []);
 
-    // login function
     const login = async (username, password) => {
         const res = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
         });
-        
         if (res.ok) {
             const data = await res.json();
             setUser(data);
@@ -43,14 +34,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // register function
     const register = async (username, password) => {
         const res = await fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
         });
-
         if (res.ok) {
             const data = await res.json();
             setUser(data);
@@ -61,7 +50,6 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // logout function
     const logout = async () => {
         const res = await fetch('/api/logout', { method: 'DELETE' });
         if (res.ok) {
@@ -76,5 +64,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-// quick access to the Auth Context
 export const useAuth = () => useContext(AuthContext);

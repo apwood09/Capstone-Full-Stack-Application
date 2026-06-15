@@ -10,24 +10,39 @@ import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const { user } = useAuth(); 
+    const { user, loading, logout } = useAuth(); 
     const { quests } = useContext(QuestContext);
 
     useEffect(() => {
         // redirect to login if no user is found
-        if (!user) {
+        if (!loading && !user) {
             navigate("/"); 
         }
-    }, [user, navigate]);
+    }, [user, loading, navigate]);
+
+    const handleLogout = async () => {
+        await logout(); // calls the function from AuthContext
+        navigate("/");  // redirects to registration form
+    };
+
+    if (loading) return <p style={{ color: 'white', textAlign: 'center' }}>Consulting the archives...</p>; 
 
     return (
         <div className="grimoire-container">
+            <button 
+                onClick={() => navigate("/")} 
+                style={{ margin: '10px', cursor: 'pointer' }}
+            >
+                Back to Sign Up
+            </button>
+
+            <button onClick={handleLogout}>Log Out</button>
+
             <h1 style={{ color: 'var(--arcane-gold)', textAlign: 'center' }}>The Daily Grimoire</h1>
             <GrimoireForm />
             
             <div className="quest-list">
-                {/* Add this debug/status logic */}
-                {quests.length === 0 ? (
+                {quests && quests.length === 0 ? (
                     <p style={{ textAlign: 'center' }}>No quests found in the Grimoire. Inscribe one above!</p>
                 ) : (
                     quests.map(quest => (
