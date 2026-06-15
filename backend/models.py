@@ -21,7 +21,10 @@ class User(db.Model, SerializerMixin):
         self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
     def check_password(self, password):
-        return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
+        return bcrypt.checkpw(
+            password.encode('utf-8'), 
+            self.password_hash.encode('utf-8')
+        )
 
 class Quest(db.Model, SerializerMixin):
     __tablename__ = 'quests'

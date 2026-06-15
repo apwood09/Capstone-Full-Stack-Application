@@ -1,25 +1,35 @@
 # secure API architecture
 # handles complete authentication routing & granular CRUD endpoints, isolating user scopes through standard Flask cookies(session)
 
-from flask import request, session, jsonify
-from app import app, db
-from models import User, Quest, Note
+from flask import Blueprint, request, session, jsonify
+from models import db, User
 
-@app.route('/api/register', methods=['POST'])
+bp = Blueprint('routes', __name__)
+
+@bp.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    
+    if User.query.filter_by(username=username).first():
+        return jsonify({"error": "This soul is already bound to the Grimoire"}), 409
+
     try:
-        new_user = User(username=data.get('username'))
-        new_user.set_password(data.get('password'))
+        new_user = User(username=username)
+        new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
         session['user_id'] = new_user.id
         return jsonify(new_user.to_dict()), 201
     except Exception as e:
         db.session.rollback()
+
+        print(f"Error during registration: {e}") 
         return jsonify({"error": "Failed to bind new user to the Grimoire"}), 400
 
-@app.route('/api/login', methods=['POST'])
+@bp.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
     try:
@@ -32,7 +42,15 @@ def login():
         db.session.rollback()
         return jsonify({"error": "A disruption occurred in the arcane network"}), 500
 
-@app.route('/api/quests', methods=['GET', 'POST'])
+@bp.route('/api/check_session', methods=['GET'])
+def check_session():
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        return jsonify(user.to_dict()), 200
+    return jsonify({"error": "No active session"}), 401
+
+@bp.route('/api/quests', methods=['GET', 'POST'])
 def manage_quests():
     user_id = session.get('user_id')
     if not user_id:
@@ -53,7 +71,7 @@ def manage_quests():
             db.session.rollback()
             return jsonify({"error": "Failed to scribe quest"}), 500
 
-@app.route('/api/quests/<int:id>', methods=['DELETE'])
+@bp.route('/api/quests/<int:id>', methods=['DELETE'])
 def delete_quest(id):
     try:
         quest = Quest.query.get(id)
