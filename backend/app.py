@@ -2,7 +2,7 @@
 # sets up flask env, configs secret session keys, & integrates bcrypt password security
 
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
 from models import db
@@ -31,6 +31,10 @@ def create_app():
 
     from routes import bp
     app.register_blueprint(bp)
+
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        return jsonify({"error": "Backend Error", "details": str(e)}), 500
 
     return app 
 
