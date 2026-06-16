@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     const API_URL = import.meta.env.VITE_API_URL || '';
 
     useEffect(() => {
-        fetch('${API_URL}/api/check_session', { credentials: 'include' })
+        fetch(`${API_URL}/api/check_session`, { credentials: 'include' })
             .then(res => res.ok ? res.json() : null)
             .then(data => setUser(data))
             .catch(() => setUser(null))
