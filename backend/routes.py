@@ -31,29 +31,30 @@ def register():
 
 @bp.route('/api/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    
-    user = User.query.filter_by(username=username).first()
-    
-    # LOGGING TO RENDER CONSOLE
-    print(f"DEBUG: Attempting login for '{username}'")
-    if user:
-        is_password_correct = user.check_password(password)
-        print(f"DEBUG: User found. Password match: {is_password_correct}")
-    else:
-        print("DEBUG: User not found in database.")
-    
-    if user and user.check_password(password):
-        session['user_id'] = user.id
-        return jsonify(user.to_dict()), 200
-    
-    return jsonify({"error": "Invalid incantation"}), 401
-    
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        
+        user = User.query.filter_by(username=username).first()
+        
+        print(f"DEBUG: Attempting login for '{username}'")
+        if user:
+            is_password_correct = user.check_password(password)
+            print(f"DEBUG: User found. Password match: {is_password_correct}")
+        else:
+            print("DEBUG: User not found in database.")
+        
+        if user and user.check_password(password):
+            session['user_id'] = user.id
+            return jsonify(user.to_dict()), 200
+        
+        return jsonify({"error": "Invalid incantation"}), 401
+        
     except Exception as e:
+        print(f"DEBUG: Login route error: {e}") # Log the error to Render
         return jsonify({"error": "Backend Error", "details": str(e), "type": type(e).__name__}), 500
-
+        
 @bp.route('/api/check_session', methods=['GET'])
 def check_session():
     user_id = session.get('user_id')
