@@ -90,6 +90,6 @@ def delete_quest(id):
 @bp.route('/api/logout', methods=['DELETE'])
 def logout():
     session.clear() # clears the whole session 
-    response = jsonify({"message": "Soul unbound"})
-    response.delete_cookie('session')
-    return jsonify({"message": "Soul unbound from the Grimoire"}), 200
+    response = make_response(jsonify({"message": "Soul unbound"}))
+    response.set_cookie('session', '', expires=0) 
+    return response
