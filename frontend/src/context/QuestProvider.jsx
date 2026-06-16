@@ -13,7 +13,7 @@ export const QuestProvider = ({ children }) => {
     const fetchQuests = async () => {
         try {
             
-            const res = await fetch('${API_URL}/api/quests', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/quests`, {
                 credentials: 'include'
             });
             
