@@ -1,29 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const API_URL = import.meta.env.VITE_API_URL; 
-
+        
     const handleLogin = async (e) => {
         e.preventDefault();
         
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-            credentials: 'include' 
-        });
+        const result = await login(username, password);
 
-        if (res.ok) {
-            navigate('/dashboard');
-    } else {
-        alert("Invalid credentials.");
-    }
-};
+        if (result.success) {
+            navigate('/dashboard'); // Now AuthContext is updated, and the guard will pass
+        } else {
+            alert(result.error || "Invalid credentials.");
+        }
+    };
 
    return (
         <div className="login-container">
