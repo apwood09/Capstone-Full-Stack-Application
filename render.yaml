@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: grimoire-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app

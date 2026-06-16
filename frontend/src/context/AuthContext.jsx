@@ -8,9 +8,10 @@ export const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const API_URL = import.meta.env.VITE_API_URL || '';
 
     useEffect(() => {
-        fetch('/api/check_session', { credentials: 'include' })
+        fetch('${API_URL}/api/check_session', { credentials: 'include' })
             .then(res => res.ok ? res.json() : null)
             .then(data => setUser(data))
             .catch(() => setUser(null))
@@ -18,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (username, password) => {
-        const res = await fetch('/api/login', {
+        const res = await fetch('${API_URL}/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (username, password) => {
-        const res = await fetch('/api/register', {
+        const res = await fetch('${API_URL}/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            const res = await fetch('/api/logout', { 
+            const res = await fetch('${API_URL}/api/logout', { 
                 method: 'DELETE',
                 credentials: 'include' 
             }); // Fixed: Added closing brace here

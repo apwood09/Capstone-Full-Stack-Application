@@ -7,11 +7,13 @@ export const QuestContext = createContext();
 export const QuestProvider = ({ children }) => {
     const [quests, setQuests] = useState([]);
 
+    const API_URL = import.meta.env.VITE_API_URL || '';
+
     // Fetch all quests for the current user from the backend
     const fetchQuests = async () => {
         try {
             
-            const res = await fetch('/api/quests', {
+            const res = await fetch('${API_URL}/api/quests', {
                 credentials: 'include'
             });
             
@@ -33,7 +35,7 @@ export const QuestProvider = ({ children }) => {
 
     // Add a new quest
     const addQuest = async (title) => {
-        const res = await fetch('/api/quests', {
+        const res = await fetch('${API_URL}/api/quests', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -46,7 +48,7 @@ export const QuestProvider = ({ children }) => {
 
     // Remove a quest
     const deleteQuest = async (id) => {
-        const res = await fetch(`/api/quests/${id}`, { method: 'DELETE', credentials: 'include' });
+        const res = await fetch(`${API_URL}/api/quests/${id}`, { method: 'DELETE', credentials: 'include' });
         if (res.ok) {
             setQuests((prev) => prev.filter((quest) => quest.id !== id));
         }
