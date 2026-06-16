@@ -1,39 +1,23 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
-// Create the Context to be used by your components
 export const QuestContext = createContext();
 
-// Create the Provider component
 export const QuestProvider = ({ children }) => {
     const [quests, setQuests] = useState([]);
+    const API_URL = import.meta.env.VITE_API_URL || 'https://backend-daily-chore-grimoire.onrender.com';
 
-    const API_URL = import.meta.env.VITE_API_URL || '';
-
-    // Fetch all quests for the current user from the backend
     const fetchQuests = async () => {
         try {
-            
-            const res = await fetch(`${API_URL}/api/quests`, {
-                credentials: 'include'
-            });
-            
+            const res = await fetch(`${API_URL}/api/quests`, { credentials: 'include' });
             if (res.ok) {
                 const data = await res.json();
                 setQuests(data);
-            } else {
-                console.error("Failed to fetch quests: Response not OK");
             }
         } catch (error) {
-            console.error("Error connecting to the Grimoire:", error);
+            console.error("Error fetching quests:", error);
         }
     };
 
-    // Load quests when the provider initializes
-    useEffect(() => {
-        fetchQuests();
-    }, []);
-
-    // Add a new quest
     const addQuest = async (title) => {
         const res = await fetch(`${API_URL}/api/quests`, {
             method: 'POST',
@@ -41,25 +25,22 @@ export const QuestProvider = ({ children }) => {
             credentials: 'include',
             body: JSON.stringify({ title })
         });
-        if (res.ok) {
-            fetchQuests(); // refresh list after adding
-        }
+        if (res.ok) fetchQuests();
     };
 
-    // Remove a quest
     const deleteQuest = async (id) => {
-        const res = await fetch(`${API_URL}/api/quests/${id}`, { method: 'DELETE', credentials: 'include' });
-        if (res.ok) {
-            setQuests((prev) => prev.filter((quest) => quest.id !== id));
-        }
+        const res = await fetch(`${API_URL}/api/quests/${id}`, { 
+            method: 'DELETE', 
+            credentials: 'include' 
+        });
+        if (res.ok) fetchQuests();
     };
 
     return (
-        <QuestContext.Provider value={{ quests, addQuest, deleteQuest }}>
+        <QuestContext.Provider value={{ quests, fetchQuests, addQuest, deleteQuest }}>
             {children}
         </QuestContext.Provider>
     );
 };
 
-// Custom hook to make using the context easier in other components
 export const useQuests = () => useContext(QuestContext);
