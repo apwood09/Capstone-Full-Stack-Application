@@ -27,47 +27,30 @@ The Daily Grimoire is a full-stack productivity tracker infused with a mystical,
 
 ---
 
-## 🚀 Local Setup & Installation
+## 🚀 Run On Render
 
-To run this application locally, you will need two terminal windows open: one for the backend server and one for the frontend development server.
+copy & paste in web browser: 
+https://frontend-daily-chore-grimoire.onrender.com/
 
-### Prerequisites
-* Python 3.8+
-* Node.js (v16+)
-* `pip` or `pipenv`
+## 🚀 How To Use Grimoire 
 
-### Part 1: Backend Setup
+1. Register OR Log In 
 
-Open a terminal and navigate to the backend directory:
-cd backend
+Register: 
+type unique username & password 
+click sign up 
 
-Install the required Python dependencies:
-pip install -r requirements.txt
+Log In: 
+Click Log In Here
+Type username & password
+Click Unlock Grimoire
 
-Initialize the database and run migrations:
+2. Add Quests
+type unique quest name 
+click Binqd Quest
 
-flask db init
-flask db migrate -m "Initial migration"
-flask db upgrade
+3. Delete Quest
+click red button vanish
 
-Seed the database with the initial Archmage user:
-python seed.py
-
-Start the Flask server:
-python app.py
-
-The backend will now run on http://127.0.0.1:5555
-
-### Part 2: Frontend Setup
-
-Open a new terminal window and navigate to the frontend directory:
-cd frontend
-
-Install the required Node dependencies:
-npm install
-
-Start the Vite development server:
-npm run dev
-
-The frontend will now run on http://localhost:5173 (or the port specified in your terminal)
-
+4. Logout 
+click gold logout button
