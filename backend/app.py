@@ -10,21 +10,21 @@ from models import db
 def create_app():
     app = Flask(__name__)
 
+    # Configs
     app.config.update(
-    SESSION_COOKIE_SAMESITE='None',
-    SESSION_COOKIE_SECURE=True, 
-    SESSION_COOKIE_HTTPONLY=True,
-)
+        SESSION_COOKIE_SAMESITE='None',
+        SESSION_COOKIE_SECURE=True, 
+        SESSION_COOKIE_HTTPONLY=True,
+    )
 
     app.secret_key = os.environ.get('SECRET_KEY', 'default_arcane_secret_123')    
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///grimoire.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///grimoire.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-   CORS(app, 
-     supports_credentials=True, 
-     origins=["https://frontend-daily-chore-grimoire.onrender.com"])
-
-    from models import db
+    # CORS configuration
+    CORS(app, 
+         supports_credentials=True, 
+         origins=["https://frontend-daily-chore-grimoire.onrender.com"])
 
     db.init_app(app)
 
@@ -39,12 +39,8 @@ def create_app():
 
     @app.errorhandler(Exception)
     def handle_exception(e):
-        # This will show the actual Python error instead of the custom string
         return jsonify({"error": "Backend Error", "details": str(e)}), 500
 
     return app 
 
 app = create_app()
-
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
