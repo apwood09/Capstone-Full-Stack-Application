@@ -14,6 +14,7 @@ def create_app():
     SESSION_COOKIE_SAMESITE='None',
     SESSION_COOKIE_SECURE=True, 
     SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_DOMAIN=None
 )
 
     app.secret_key = os.environ.get('SECRET_KEY', 'default_arcane_secret_123')    
@@ -22,7 +23,10 @@ def create_app():
 
     CORS(app, 
      supports_credentials=True, 
-     origins=["https://frontend-daily-chore-grimoire.onrender.com"])
+     origins=["https://frontend-daily-chore-grimoire.onrender.com"],
+     allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
+     expose_headers=["Access-Control-Allow-Credentials"]
+)
 
     from models import db
 
