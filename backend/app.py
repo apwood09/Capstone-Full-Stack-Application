@@ -34,6 +34,7 @@ def create_app():
 
     @app.errorhandler(Exception)
     def handle_exception(e):
+        # This will show the actual Python error instead of the custom string
         return jsonify({"error": "Backend Error", "details": str(e)}), 500
 
     return app 
