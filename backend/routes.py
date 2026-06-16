@@ -32,12 +32,25 @@ def register():
 @bp.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
-    try:
-        user = User.query.filter_by(username=data.get('username')).first()
-        if user and user.check_password(data.get('password')):
-            session['user_id'] = user.id
-            return jsonify(user.to_dict()), 200
-        return jsonify({"error": "Invalid incantation"}), 401
+    username = data.get('username')
+    password = data.get('password')
+    
+    user = User.query.filter_by(username=username).first()
+    
+    # LOGGING TO RENDER CONSOLE
+    print(f"DEBUG: Attempting login for '{username}'")
+    if user:
+        is_password_correct = user.check_password(password)
+        print(f"DEBUG: User found. Password match: {is_password_correct}")
+    else:
+        print("DEBUG: User not found in database.")
+    
+    if user and user.check_password(password):
+        session['user_id'] = user.id
+        return jsonify(user.to_dict()), 200
+    
+    return jsonify({"error": "Invalid incantation"}), 401
+    
     except Exception as e:
         return jsonify({"error": "Backend Error", "details": str(e), "type": type(e).__name__}), 500
 
