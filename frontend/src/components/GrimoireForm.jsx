@@ -15,7 +15,10 @@ const GrimoireForm = () => {
 
     return (
         <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+            {/* Added id and name attributes below */}
             <input 
+                id="quest-title"
+                name="quest-title"
                 type="text" 
                 value={title} 
                 onChange={(e) => setTitle(e.target.value)} 
