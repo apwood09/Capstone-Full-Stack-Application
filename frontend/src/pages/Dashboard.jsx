@@ -28,12 +28,6 @@ const Dashboard = () => {
 
     return (
         <div className="grimoire-container">
-            <button 
-                onClick={() => navigate("/")} 
-                style={{ margin: '10px', cursor: 'pointer' }}
-            >
-                Back to Sign Up
-            </button>
 
             <button onClick={handleLogout}>Log Out</button>
 
