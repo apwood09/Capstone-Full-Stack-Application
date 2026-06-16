@@ -16,7 +16,7 @@ def create_app():
     SESSION_COOKIE_HTTPONLY=True,
 )
 
-    app.secret_key = os.environ.get('SECRET_KEY', 'arcane_secret_999')    
+    app.secret_key = os.environ.get('SECRET_KEY', 'default_arcane_secret_123')    
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///grimoire.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

@@ -6,10 +6,12 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    const API_URL = import.meta.env.VITE_API_URL || ''; // Add this!
+
     const handleLogin = async (e) => {
         e.preventDefault();
         
-        const res = await fetch('/api/login', {
+        const res = await fetch('${API_URL}/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -17,7 +19,7 @@ const Login = () => {
         });
 
         if (res.ok) {
-        window.location.href = '/dashboard';
+            navigate('/dashboard');
     } else {
         alert("Invalid credentials.");
     }
