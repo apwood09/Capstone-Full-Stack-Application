@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (username, password) => {
-        const res = await fetch('${API_URL}/api/login', {
+        const res = await fetch(`${API_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (username, password) => {
-        const res = await fetch('${API_URL}/api/register', {
+        const res = await fetch(`${API_URL}/api/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            const res = await fetch('${API_URL}/api/logout', { 
+            const res = await fetch(`${API_URL}/api/logout`, { 
                 method: 'DELETE',
                 credentials: 'include' 
             }); // Fixed: Added closing brace here
