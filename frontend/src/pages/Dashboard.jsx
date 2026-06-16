@@ -11,7 +11,13 @@ import { useAuth } from "../context/AuthContext";
 const Dashboard = () => {
     const navigate = useNavigate();
     const { user, loading, logout } = useAuth(); 
-    const { quests } = useContext(QuestContext);
+    const { quests, fetchQuests} = useContext(QuestContext);
+
+    useEffect(() => {
+        if (user) {
+            fetchQuests();
+        }
+    }, [user]);
 
     const handleLogout = async () => {
         await logout(); // calls the function from AuthContext
