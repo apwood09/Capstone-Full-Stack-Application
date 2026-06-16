@@ -26,7 +26,7 @@ def create_app():
 
     from models import db
 
-    db.init_app(app)
+    # db.init_app(app)
     Migrate(app, db)
 
     from routes import bp
