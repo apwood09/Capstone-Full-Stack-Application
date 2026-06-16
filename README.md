@@ -45,12 +45,12 @@ Click Log In Here
 Type username & password
 Click Unlock Grimoire
 
-2. Add Quests
+2. Add Quests:
 type unique quest name 
 click Binqd Quest
 
-3. Delete Quest
+3. Delete Quest:
 click red button vanish
 
-4. Logout 
+4. Logout:
 click gold logout button
