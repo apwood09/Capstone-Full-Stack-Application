@@ -58,8 +58,8 @@ def login():
 @bp.route('/api/check_session', methods=['GET'])
 def check_session():
     user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
+    user = User.query.get(user_id) if user_id else None
+    if user:
         return jsonify(user.to_dict()), 200
     return jsonify({"error": "No active session"}), 401
 
