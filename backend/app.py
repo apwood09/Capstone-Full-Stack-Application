@@ -11,7 +11,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///grimoire.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    CORS(app, supports_credentials=True, origins="*")
+    CORS(app, supports_credentials=True, origins="https://frontend-daily-chore-grimoire.onrender.com")
 
     from models import db
 
