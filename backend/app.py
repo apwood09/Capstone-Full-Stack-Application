@@ -14,19 +14,15 @@ def create_app():
     SESSION_COOKIE_SAMESITE='None',
     SESSION_COOKIE_SECURE=True, 
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_DOMAIN=None
 )
 
     app.secret_key = os.environ.get('SECRET_KEY', 'default_arcane_secret_123')    
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///grimoire.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    CORS(app, 
+   CORS(app, 
      supports_credentials=True, 
-     origins=["https://frontend-daily-chore-grimoire.onrender.com"],
-     allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
-     expose_headers=["Access-Control-Allow-Credentials"]
-)
+     origins=["https://frontend-daily-chore-grimoire.onrender.com"])
 
     from models import db
 
