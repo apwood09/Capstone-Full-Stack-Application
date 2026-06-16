@@ -36,21 +36,21 @@ https://frontend-daily-chore-grimoire.onrender.com/
 
 1. Register OR Log In 
 
-Register: 
+*Register: 
 type unique username & password 
 click sign up 
 
-Log In: 
+*Log In: 
 Click Log In Here
 Type username & password
 Click Unlock Grimoire
 
 2. Add Quests:
-type unique quest name 
-click Binqd Quest
+*type unique quest name 
+*click Bind Quest
 
 3. Delete Quest:
-click red button vanish
+*click red button vanish
 
 4. Logout:
-click gold logout button
+*click gold logout button
