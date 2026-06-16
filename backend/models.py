@@ -8,7 +8,7 @@ import bcrypt
 
 db = SQLAlchemy()
 
-class User(db.Model):
+class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     serialize_rules = ('-quests.user', '-password_hash')
 

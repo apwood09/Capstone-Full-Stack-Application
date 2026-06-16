@@ -39,8 +39,7 @@ def login():
             return jsonify(user.to_dict()), 200
         return jsonify({"error": "Invalid incantation"}), 401
     except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": "A disruption occurred in the arcane network"}), 500
+        return jsonify({"error": "Backend Error", "details": str(e), "type": type(e).__name__}), 500
 
 @bp.route('/api/check_session', methods=['GET'])
 def check_session():
