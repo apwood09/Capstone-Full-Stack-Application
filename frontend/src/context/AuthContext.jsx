@@ -8,15 +8,22 @@ export const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const API_URL = import.meta.env.VITE_API_URL || '';
+    const API_URL = 'https://backend-daily-chore-grimoire.onrender.com';
 
     useEffect(() => {
         fetch(`${API_URL}/api/check_session`, { credentials: 'include' })
-            .then(res => res.ok ? res.json() : null)
+            .then(res => {
+                if (res.ok) return res.json();
+                console.warn("Session check failed, status:", res.status);
+                return null;
+            })
             .then(data => setUser(data))
-            .catch(() => setUser(null))
+            .catch(err => {
+                console.error("Fetch error:", err);
+                setUser(null);
+            })
             .finally(() => setLoading(false));
-    }, []);
+    }, []); 
 
     const login = async (username, password) => {
         const res = await fetch(`${API_URL}/api/login`, {
