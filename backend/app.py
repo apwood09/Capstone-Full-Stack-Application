@@ -27,6 +27,11 @@ def create_app():
     from models import db
 
     db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+        print("Database tables ensured.")
+
     Migrate(app, db)
 
     from routes import bp
