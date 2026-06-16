@@ -1,9 +1,11 @@
 # server initialization 
 # sets up flask env, configs secret session keys, & integrates bcrypt password security
 
+import os
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
+from models import db
 
 def create_app():
     app = Flask(__name__)
